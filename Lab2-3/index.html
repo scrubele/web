@@ -1,93 +1,126 @@
 <!DOCTYPE html>
 <html>
 <title>Головна</title>
+<title>Головна</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
 <body>
-  <nav>
-    <ul class="hList">
-      <li class="menu">
-        <a href="index.html" class="menu">
-          <h2 class="menu-title">Головна</h2>
-        </a>
-      </li>
-      <li class="menu">
-        <a href="news.html" class="menu">
-          <h2 class="menu-title">Матчі</h2>
-          <ul class="menu-dropdown">
-            <li>Наступна гра</li>
-            <li>Рейтинг</li>
+
+
+  <nav class="navbar navbar-fixed-top  navbar-default bg-transparent bootsnav on scroll_menu">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+          aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav col-xs-12">
+          <li class="">
+            <a href="index.html" class="menu">
+              <h2 class="menu-title">Головна</h2>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a href="index.html" class="menu">
+              <h2 class="menu-title"> &nbsp; &nbsp;&nbsp; Матчі &nbsp; &nbsp; &nbsp; </h2>
+              <ul class="menu-dropdown  ">
+                <li>Наступна гра</li>
+                <li>Рейтинг</li>
+              </ul>
+            </a>
+          </li>
+
+          <li class="">
+            <a href="news.html" class="menu">
+              <h2 class="menu-title">Новини</h2>
+            </a>
+          </li>
+          <li class="">
+            <a href="#click" class="menu">
+              <h2 class="menu-title">Фани</h2>
+
+            </a>
+          </li>
+          <li class="">
+            <a href="#click" class="menu">
+              <h2 class="menu-title">Контакти</h2>
+
+            </a>
+          </li>
+          <li class="">
+            <a href="#click" class="menu">
+              <h2 class="menu-title">Адмін</h2>
+
+            </a>
+          </li>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="logo"><img src="img/logo.jpg" class="logo" style="height:100%;"></img></li>
           </ul>
-        </a>
-      </li>
-      <li class="menu">
-        <a href="news.html" class="menu">
-          <h2 class="menu-title">Новини</h2>
-        </a>
-      </li>
-      <li class="menu">
-        <a href="#click" class="menu">
-          <h2 class="menu-title">Фани</h2>
-
-        </a>
-      </li>
-      <li class="menu">
-        <a href="#click" class="menu">
-          <h2 class="menu-title">Контакти</h2>
-
-        </a>
-      </li>
-      <li class="menu">
-        <a href="#click" class="menu">
-          <h2 class="menu-title">Адмін</h2>
-
-        </a>
-      </li>
-      <li class="logo"><img src="img/logo.jpg" class="logo" style="height:100%;" ></img></li>
-
-    </ul>
+        </ul>
+      </div>
+    </div>
   </nav>
   <content>
-    <section class="main" id=main >
+    <section class="main" id=main>
       <img src="img/2.jpg" class="first"></img>
     </section>
-    <section class="matches" id=matches >
+    <section class="matches" id=matches>
 
-    <h1>Федерація тенісу України</h1>
-    <div class="container">  <img src="img/tenis.jpg" class=""></img></div>
-    <div class="text">
-    <p>Жіноча збірна України з тенісу — є офіційним представником Федерації тенісу України на виступах за Кубок Федерації.</p>
-    <p>Українська жіноча збірна заснована у 1993 році.</p>
-    <p>  У 2009 збірна здобула право виступати у I світовій групі, перемігши збірну Аргентини.</p>
-    <p>Першим супротивником для українок стануть чинні володарі кубка тенісистки Італії.</p>
-  </p>
-</div>
-</section>
-<section class="last-win blue" id=last-win >
-<div class="wins">
+      <h1>Федерація тенісу України</h1>
+      <div class="matches-all">
+      
+        <div class="text">
+          <p>Жіноча збірна України з тенісу — є офіційним представником Федерації тенісу України на виступах за Кубок
+            Федерації.</p>
+          <p>Українська жіноча збірна заснована у 1993 році.</p>
+          <p> У 2009 збірна здобула право виступати у I світовій групі, перемігши збірну Аргентини.</p>
+          <p>Першим супротивником для українок стануть чинні володарі кубка тенісистки Італії.</p>
+          </p>
+        </div>
+        <div class="cont"> <img src="img/tenis.jpg" class="zbirna"></img></div>
+      </div>
+    </section>
+    <section class="last-win blue" id=last-win>
+      <h1>Останні перемоги</h1>
+      <div class="wins">
 
-<h1>Останні перемоги</h1>
-<div class="container">Кубок Девіса,<br>  Україна-Швеція
-<img src="img/flag2.jpg" class="second"> </img>
-<p>0:1</p>
-</div>
+        
+        <div class="cont">
+          <p>Кубок Девіса,</p>
+          <p> Україна-Швеція</p>
+          <img src="img/flag2.jpg" class="second"> </img>
+          <p>0:1</p>
+        </div>
 
-<div class="container">Кубок Девіса,<br>  Україна-Франція
-<img src="img/flag3.jpg" class="second"> </img>
-<p>3:1</p>
-</div>
+        <div class="cont">
+          <p>Кубок Девіса,</p>
+          <p> Україна-Франція</p>
+          <img src="img/flag3.jpg" class="second"> </img>
+          <p>3:1</p>
+        </div>
 
-<div class="container">Кубок Девіса,<br>  Україна-Португалія
-<img src="img/flag1.jpg" class="second"> </img>
-<p>3:1</p>
-</div>
+        <div class="cont">
+          <p>Кубок Девіса,</p>
+          <p> Україна-Португалія</p>
+          <img src="img/flag1.jpg" class="second"> </img>
+          <p>3:1</p>
+        </div>
 
 
-</div>
-</section>
-</content>
-<footer>
-© Ann Man'ko
-</footer>
+      </div>
+    </section>
+  </content>
+  <footer class="footer-1">
+    <p> © Ann Man'ko</p>
+  </footer>
 </body>

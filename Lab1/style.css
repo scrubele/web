@@ -1,0 +1,101 @@
+body {
+  counter-reset: my-sec-counter;
+  padding: 20px 250px;
+
+}
+
+h1, h2, h3, h4,p{
+  font-family: "Times New Roman", Times, serif;
+}
+h1{
+  text-align: center;
+  font-size: 270%;
+}
+h1::before {
+  counter-increment: my-sec-counter;
+  content: "№" counter(my-sec-counter) ".\a";
+}
+h2{
+  white-space:pre;
+  text-align: center;
+  font-size: 210%;
+}
+h3{
+  font-size: 150%;
+  margin-bottom: 0px;
+}
+h2::before{
+  content: "❧\a";
+  text-align: center;
+}
+p{
+  font-size: 115%;
+  margin: 1.556em 0;
+
+}
+li {
+  font-size: 115%;
+}
+dl,dt,dd{
+  font-size: 115%;
+}
+.start{
+  float: left;
+  width: 120px;
+  height: 120px;
+  margin: 0 5px 25px 0;
+}
+q {
+  quotes: "“" "”" "‚" "‘";
+}
+.img-center{
+  text-align: center;
+}
+
+.img-right{
+  float: right;
+  margin: 0 0 5px 5px;
+}
+.img-left{
+  float:left;
+  margin: 10px 0px 10px 0;
+
+}
+
+a:link {
+  color: FireBrick;
+  border-bottom: 1px dotted;
+}
+
+.content{
+  border:1px solid black ;
+
+}
+table{
+  margin-top: 20px;
+}
+table blockquote{
+  padding-right: 20%;
+}
+.moneybag{
+  background: white url(img/moneybag.jpg) bottom right no-repeat ;
+  background-size: contain;
+
+}
+
+.clicker {
+
+text-align: center;
+cursor:pointer;
+}
+
+.hiddendiv{
+display:none;
+}
+
+.clicker:focus + .hiddendiv{
+display:block;
+}
+.hiddendiv:focus{
+  display: block;
+}
