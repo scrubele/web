@@ -8,7 +8,7 @@ body {
   height: 100vh;
   background-color: #ffffff;
   font-family: "Comic Sans MS", cursive, sans-serif;
-  color: #555555;
+  color: #ffffff;
 }
 
 a {
@@ -48,8 +48,20 @@ $menu_WIDTH: 150px;
   font-size: 1.5rem;
   text-transform: uppercase;
   transition: 0.3s background-color;
+  height: 5%;
 }
+.nav>li>a{
+  padding: 0px;
+}
+@media only screen and  (max-width: 700px) {
+  .menu-title{
+    padding:0;
+  }
+  .nav>li>a{
+    padding: 0px;
+  }
 
+}
 .menu-title:before {
   content: "";
   display: block;
@@ -396,6 +408,33 @@ h2 {
   font-size: 1rem;
 }
 
+#table{
+  padding: 10% 0;
+  text-align: center;
+  
+}
+#table>h2{
+  padding:5px;
+  
+}
+#contacts{
+  padding: 10% 0;
+  text-align: center;
+}
+#admin{
+  padding: 10% 0;
+  text-align: center;
+}
+h2.admin{
+  padding: 25px 0;
+}
+.admin{
+  margin: 20px;
+}
+.left{
+  float: left;
+  text-align: left;
+}
 @media only screen and (min-width: 900px) and (max-width: 1200px) {
   p {
     font-size: 1.5rem;
@@ -406,6 +445,25 @@ h2 {
   .menu-title {
     font-size: 1rem;
   }
+}
+
+#contacts>.container{
+  max-width: 50%;
+  margin: 0 auto;
+  margin-top:50px;
+}
+
+#map_container{
+  height: 100%;
+  position: relative;
+}
+#map{
+    height: 100%;
+    overflow: hidden;
+    
+    padding-top: 30px;
+    position: relative;
+
 }
 @media only screen and  (max-width: 500px) {
   p {
@@ -421,4 +479,7 @@ h2 {
   #main{
     padding-top: 10%;
   }
+}
+.pad{
+  padding-top:40px;
 }
