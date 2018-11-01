@@ -1,15 +1,99 @@
 // FANS PAGE
 //localStorage.clear();
+var useLocalStorage = false;
+
+//prefixes of implementation that we want to test
+window.indexedDB = window.indexedDB || window.mozIndexedDB || 
+window.webkitIndexedDB || window.msIndexedDB;
+
+//prefixes of window.IDB objects
+window.IDBTransaction = window.IDBTransaction || 
+window.webkitIDBTransaction || window.msIDBTransaction;
+window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || 
+window.msIDBKeyRange
+
+if (!window.indexedDB) {
+    window.alert("Your browser doesn't support a stable version of IndexedDB.")
+ }
+ 
+ const fansData = [ ];
+ const newsData = [];
+ var db;
+ var request = window.indexedDB.open("newDatabase", 1);
+ 
+ request.onerror = function(event) {
+    console.log("error: ");
+ };
+ 
+ request.onsuccess = function(event) {
+    db = request.result;
+    console.log("success: "+ db);
+ };
+ 
+ request.onupgradeneeded = function(event) {
+    var db = event.target.result;
+    var objectStoreFans = db.createObjectStore("fans", {keyPath: "id"});
+    
+    for (var i in fansData) {
+        objectStoreFans.add(fansData[i]);
+    }
+
+    var objectStoreNews = db.createObjectStore("news", {keyPath: "id"});
+    
+    for (var i in fansData) {
+        objectStoreNews.add(newsData[i]);
+    }
+
+ }
+ 
+
 function isOnline() {
     return window.navigator.onLine;
 }
+function addToFans(count, message) {
+    console.log("add");
+    var request = db.transaction(["fans"], "readwrite")
+    .objectStore("fans")
+    .add({ id: count, message: message });
+    
+    request.onsuccess = function(event) {
+       alert("Prasad has been added to your database.");
+    };
+    
+    request.onerror = function(event) {
+       alert("Unable to add data\r\nPrasad is already exist in your database! ");
+    }
+ }
 
+ function readFans(id) {
+    
+    var transaction = db.transaction(["fans"]);
+    var objectStore = transaction.objectStore("fans");
+    var request = objectStore.get(id);
+    var result;
+    request.onerror = function(event) {
+       alert("Unable to retrieve daa from database!");
+    };
+    
+    request.onsuccess = function(event) {
+    
+    if(request.result) {
+         // alert("Id: " + ", Message: " + request.result.message);
+          $(".fans").append(request.result.message);
+            result= request.result.message;
+       } else {
+          alert("Kenny couldn't be found in your database!");  
+       }
+    };
+    return result;
+ }
+ 
 function addFans() {
     var nowDate = new Date();
 
     var message = document.getElementById("message").value;
     var count = parseInt(localStorage.getItem('count-fans'));
-
+    if(isNaN(count)) count =0;
     if (message != "") {
         var fansText = "<article>" +
             " <p>" + message +
@@ -23,7 +107,6 @@ function addFans() {
             window.addEventListener("online", function (e) {
                 console.log("online");
                 $.post("demo_test_post.asp", {
-                    name: "fans",
                     date: nowDate,
                     message: message
                 });
@@ -32,12 +115,16 @@ function addFans() {
 
         } else {
             console.log("offline");
-            localStorage.setItem("fans-item-" + count, fansText);
+            if (useLocalStorage){
+             localStorage.setItem("fans-item-" + count, fansText);
+            } else addToFans(count, fansText);
+
             localStorage.setItem("count-fans", (count + 1));
+            
+            //var request = readFans(count);
+            
         }
 
-
-        
 
         console.log("+1");
         console.log("fans-item-" + count);
@@ -52,40 +139,32 @@ function addFans() {
     }
 }
 
-function displayFansOnline() {
-    console.log("status:online");
-    var i;
-    var count = parseInt(localStorage.getItem('count-fans'));
-    if (count >= 0) {
-        var message = "";
-        for (i = 0; i < count; i++ ) {
-            message = localStorage.getItem("fans-item-" + i);
-            $(".fans").append(message);
-            console.log("+1");
-            console.log("fans-item-" + i);
-        }
-    }
-    else localStorage.setItem('count-fans', 0);
-    
-}
-function displayFansOffline() {
-    console.log("status: offline");
-    var i;
-    var count = parseInt(localStorage.getItem('count-fans'));
-    if (count >= 0) {
-        var message = "";
-        for (i = 0; i < count; i++ ) {
-            message = localStorage.getItem("fans-item-" + i);
-            // $(".fans").append(message);
-            console.log("+1");
-            console.log("fans-item-" + i);
-        }
-    } else localStorage.setItem('count-fans', 0);
 
-    
+function displayFansOffline() {
+       
+}
+
+
+function displayFansOnline(){
+    console.log("displayFansOnline");
+    var count = parseInt(localStorage.getItem('count-fans'));
+    console.log("Fans: online");
+    var message;
+    for (i = 0; i < count; i++ ) {
+        if (useLocalStorage) {
+            message = localStorage.getItem("fans-item-"+i);
+            console.log(message);
+        } else     var request = readFans(i)
+       
+        $(".fans").append(message);
+        console.log("+1");
+        console.log("fans-item-" + i);
+    }
+
 }
 
 function deletefans() {
+    
     var i;
     for (i > 0; i < count; i++ ) {
         localStorage.removeItem('fans-item-' + i)
@@ -93,10 +172,48 @@ function deletefans() {
     localStorage.removeItem('count-fans');
 }
 
-$(function () { });
+
 
 // ADMIN PAGE
 
+function addToNews(count, message) {
+    console.log("add");
+    var request = db.transaction(["news"], "readwrite")
+    .objectStore("news")
+    .add({ id: count, message: message });
+    
+    request.onsuccess = function(event) {
+       alert("Prasad has been added to your database.");
+    };
+    
+    request.onerror = function(event) {
+       alert("Unable to add data\r\nPrasad is already exist in your database! ");
+    }
+ }
+
+ function readNews(id) {
+    console.log("readNews");
+    var transaction = db.transaction(["news"]);
+    var objectStore = transaction.objectStore("news");
+    var request = objectStore.get(id);
+    var result;
+    request.onerror = function(event) {
+       alert("Unable to retrieve daa from database!");
+    };
+    
+    request.onsuccess = function(event) {
+    
+    if(request.result) {
+        // alert("Id: " + ", Message: " + request.result.message);
+         console.log("news:"+request.result.message);
+          $(".news").append(request.result.message);
+            result= request.result.message;
+       } else {
+          alert("Kenny couldn't be found in your database!");  
+       }
+    };
+    return result;
+ }
 function addNews() {
     // var message = $('textarea#texts').val();
     console.log("is:" + isOnline());
@@ -113,19 +230,27 @@ function addNews() {
             " <img src = \"img/t4.jpg\"class = \"third\" >  </img > " +
             "<p class = \"blue\" >" + title + "</p > " +
             " <div class = \"cont-text\" >" + message + "</div ></div > ";
+        if (isOnline()){
+           
+        } else {
+            if(useLocalStorage){
+                localStorage.setItem("news-item-" + count, fansText);
+                console.log("added");
+                    } else 
+                     addToNews(count, fansText);
+                localStorage.setItem("count-news", (count + 1));
 
-        localStorage.setItem("news-item-" + count, fansText);
-        localStorage.setItem("count-news", (count + 1));
-
+        }
         // $(".news").append(fansText); 
         alert("News is added.");
         console.log("+1");
         console.log("news-item-" + count);
-        console.log(fansText);
+       // console.log(fansText);
 
         document.getElementById("texts").value = "";
         document.getElementById("title").value = "";
-        document.getElementById("message").style.borderColor = "black";
+       // document.getElementById("texts").style.borderColor = "black"; 
+       // document.getElementById("title").style.borderColor = "black";
     } else {
 
         if (message == "") {
@@ -153,8 +278,12 @@ function setNews() {
 function sendNewsToServer(){
     var i;
     var count = parseInt(localStorage.getItem('count-news'));
+    var message;
     for (i = 0; i < count; i++ ) {
+        if(useLocalStorage){
         message = localStorage.getItem("news-item-" + i);
+        } else
+         request= readNews(i);
         $(".news").append(message);
         $.post("demo_test_post.asp", {
             name: "news",
@@ -176,12 +305,13 @@ function displayNewsOffline() {
     for (i = 0; i < count; i++ ) {
         message = localStorage.getItem("news-item-" + i);
         console.log(message);
-     //   $(".news").append(message);
+       $(".news").append(message);
         console.log("+1");
         console.log("news-item-" + i);
     }
 }
 
+ 
 function displayNewsOnline() {
     sendNewsToServer();
     getFromServe();
@@ -205,3 +335,5 @@ window.addEventListener('load', function () {
     window.addEventListener('offline',  displayFansOffline());
     }
 }); 
+
+
