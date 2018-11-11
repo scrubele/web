@@ -1,23 +1,32 @@
-var useLocalStorage = true;
-
+'use strict';
+ var useLocalStorage = false;
+//var http = require ('http');
 //prefixes of implementation that we want to test
-window.indexedDB = window.indexedDB || window.mozIndexedDB || 
-window.webkitIndexedDB || window.msIndexedDB;
+// window.indexedDB = window.indexedDB || window.mozIndexedDB || 
+//  window.webkitIndexedDB || window.msIndexedDB;
 
-//prefixes of window.IDB objects
-window.IDBTransaction = window.IDBTransaction || 
-window.webkitIDBTransaction || window.msIDBTransaction;
-window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || 
-window.msIDBKeyRange
+// // //prefixes of window.IDB objects
+// window.IDBTranaction = window.IDBTranaction || 
+// window.webkitIDBTranaction || window.msIDBTranaction;
+// window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || 
+// window.msIDBKeyRange
+
+if (typeof(window) !== 'undefined') {
+    // code here
 
 if (!window.indexedDB) {
     window.alert("Your browser doesn't support a stable version of IndexedDB.")
  }
+
  
- const fansData = [];
+ const fanData = [];
  const newsData = [];
  var db;
+ 
+
  var request = window.indexedDB.open("newDatabase", 1);
+ 
+ 
  console.log("request");
  request.onerror = function(event) {
     console.log("error: ");
@@ -32,25 +41,26 @@ if (!window.indexedDB) {
  
  request.onupgradeneeded = function(event) {
     var db = event.target.result;
-    var objectStoreFans = db.createObjectStore("fans", {keyPath: "id"});
+    var objectStoreFan = db.createObjectStore("fan", {keyPath: "id"});
     console.log("created");
-    for (var i in fansData) {
-        objectStoreFans.add(fansData[i]);
+    for (var i in fanData) {
+        objectStoreFan.add(fanData[i]);
     }
 
     var objectStoreNews = db.createObjectStore("news", {keyPath: "id"});
     
-    for (var i in fansData) {
+    for (var i in fanData) {
         objectStoreNews.add(newsData[i]);
     }
 
  }
- 
+}
  function isOnline() {
     return window.navigator.onLine;
 }
 
-class Fans{
+
+class Fan{
    
     constructor(){
         try{ 
@@ -61,25 +71,25 @@ class Fans{
         var message ="";
         var title ="";
     }
-        this.fanstext = message;
+        this.fantext = message;
         this.date = nowDate.getDate() + "." + (nowDate.getMonth() + 1) + "." + nowDate.getFullYear();
     }
-    set fans(text){
+    set fan(text){
         console.log("text: "+text);
-        [this.fanstext, this.date] = text.split(' ');
+        [this.fantext, this.date] = text.split(' ');
     }
     toString(){
-        return `${(this.fanstext)} ${(this.date)}`;
+        return `${(this.fantext)} ${(this.date)}`;
     }
     append() {
         var original = document.getElementById("fans-div");
-        var fans = document.createElement("article");
-        fans.innerHTML=
-        " <p>" + `${(this.fanstext)}` + " </p>" +
+        var fan = document.createElement("article");
+        fan.innerHTML=
+        " <p>" + `${(this.fantext)}` + " </p>" +
         "  <p class=\"col-sm-10\">"+`${(this.date)}` + "</p> " +
         " <h4 class=\"font-weight-bold\">Tenis Fan 2018</h4>" +
         "   <hr style=\"border-width:6px; color:black\">" ;
-        original.appendChild(fans);
+        original.appendChild(fan);
         document.getElementById("message").value = "";
     }
     check(){
@@ -89,19 +99,19 @@ class Fans{
         }
     }
     addToLocalStorage(){
-        var count = parseInt(localStorage.getItem('count-fans'));
+        var count = parseInt(localStorage.getItem('count-fan'));
         if(isNaN(count)) count =0;
 
-        localStorage.setItem("fans-item-" + count, `${(this).toString()}`);
+        localStorage.setItem("fan-item-" + count, `${(this).toString()}`);
         console.log( `${(this).toString()}`);
-        localStorage.setItem("count-fans", (count + 1));
+        localStorage.setItem("count-fan", (count + 1));
     }
 
     addToIndexedDB() {
-        var count = parseInt(localStorage.getItem('count-fans'));
+        var count = parseInt(localStorage.getItem('count-fan'));
         if(isNaN(count)) count =0;
-        var request = db.transaction(["fans"], "readwrite")
-                        .objectStore("fans")
+        var request = db.tranaction(["fan"], "readwrite")
+                        .objectStore("fan")
                         .add({id: count, message: `${(this).toString()}`});
         
         request.onsuccess = function(event) {
@@ -112,44 +122,68 @@ class Fans{
            alert("Unable to add data\r\nPrasad is already exist in your database! ");
         }
 
-        localStorage.setItem("count-fans", (count + 1));
+        localStorage.setItem("count-fan", (count + 1));
      }
      addToServer(){
-        window.addEventListener("online", function (e) {
-            console.log("online");
-            $.post("demo_test_post.asp", {
-                date: this.date,
-                message: this.fansText
-            });
-        })
-     }
-     
+        // console.log("Complete");
+        // var myHeaders = new Headers();
+
+        // var myInit = { method: 'GET',
+        //        headers: myHeaders,
+        //        mode: 'cors',
+        //        cache: 'default' };
+               
+        // fetch('http://localhost:8000/feedbacks', myInit, (res) => {
+        //     console.log("Complete");
+        //     res.resume();
+        //     res.on('end', () => {
+                
+        //       if (!res.complete)
+        //         console.error(
+        //           'The connection was terminated while the message was still being sent');
+        //     });
+        //   });
+        
+        // }
+        return fetch('http://localhost:8000/feedbacks/', {
+            credentials: 'same-origin', // 'include', default: 'omit'
+            method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
+            
+            body: JSON.stringify(`${(this).toString()}`), // Coordinate the body type with 'Content-Type'
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Access-Control-Request-Method': 'POST',
+                'Access-Control-Request-Headers': 'content-type'
+            }),
+            })
+        .then(response => response.json());
+}
 }
 
-function addFans() {
-    
-    fans1 = new Fans();
-    console.log(fans1.toString());
+function addFan() {
+    var fan1;
+    fan1 = new Fan();
+    console.log(fan1.toString());
 
     if (isOnline()){
-        fans1.addToServer();
-        fans1.append();
+        fan1.addToServer();
+        fan1.append();
     } else {
         if (useLocalStorage){
-            fans1.addToLocalStorage();
+            fan1.addToLocalStorage();
         } else
         {
-            fans1.addToIndexedDB();
+            fan1.addToIndexedDB();
         }
        
     }
     document.getElementById("message").value = "";
 
 }
-function readFans(id) {
+function readFan(id) {
     
-    var transaction = db.transaction(["fans"]);
-    var objectStore = transaction.objectStore("fans");
+    var tranaction = db.tranaction(["fan"]);
+    var objectStore = tranaction.objectStore("fan");
     var request = objectStore.get(id);
     var result;
     request.onerror = function(event) {
@@ -159,9 +193,9 @@ function readFans(id) {
     request.onsuccess = function(event) {
     
     if(request.result) {
-        var fans1 = new Fans();
-        fans1.fans = request.result.message;
-        fans1.append();
+        var fan1 = new Fan();
+        fan1.fan = request.result.message;
+        fan1.append();
        
             console.log(request.result.message);
             return request.result.message;
@@ -172,39 +206,41 @@ function readFans(id) {
     return "";
  }
 
-function displayFansOnline(){
-    var count = parseInt(localStorage.getItem('count-fans'));
+function displayFanOnline(){
+    var count = parseInt(localStorage.getItem('count-fan'));
+    if (isNullcount)
     var message;
     console.log(count);
-    var fans1 = new Fans();
+    var fan1 = new Fan();
+    var i;
     for (i = 0; i < count; i++ ) {  
         
         
          console.log(i);
         if (useLocalStorage) {
             
-            fans1.fans = localStorage.getItem("fans-item-"+i);
+            fan1.fan = localStorage.getItem("fan-item-"+i);
             console.log(message);
-            fans1.append();
+            fan1.append();
         } else {
-            readFans(i);
+            readFan(i);
             
         }
-        console.log(fans1.toString());
-       // fans1.append();
+        console.log(fan1.toString());
+       // fan1.append();
         console.log("+1");
-        console.log("fans-item-" + i);
+        console.log("fan-item-" + i);
     }
 
 }
 
-function deletefans() {
+function deletefan() {
     
     var i;
     for (i > 0; i < count; i++ ) {
-        localStorage.removeItem('fans-item-' + i)
+        localStorage.removeItem('fan-item-' + i)
     }
-    localStorage.removeItem('count-fans');
+    localStorage.removeItem('count-fan');
 }
 
 // NEWS
@@ -245,7 +281,7 @@ class News{
     check(){
         alert("The field is empty!");
         if (message == "") {
-            document.getElementById("message").style.borderColor = "red";
+            document.getElementById("texts").style.borderColor = "red";
         }
     }
     addToLocalStorage(){
@@ -260,7 +296,7 @@ class News{
     addToIndexedDB() {
         var count = parseInt(localStorage.getItem('count-news'));
         if(isNaN(count)) count =0;
-        var request = db.transaction(["news"], "readwrite")
+        var request = db.tranaction(["news"], "readwrite")
                         .objectStore("news")
                         .add({id: count, message: `${(this).toString()}`});
         
@@ -275,19 +311,24 @@ class News{
         localStorage.setItem("count-news", (count + 1));
      }
      addToServer(){
-        window.addEventListener("online", function (e) {
-            console.log("online");
-            $.post("demo_test_post.asp", {
-                date: this.date,
-                message: this.newsText
+        var req = http.request(options, function (res) {
+            var responseString = "";
+        
+            res.on("data", function (data) {
+                responseString += data;
+                // save all the data from response
             });
-        })
+            res.on("end", function () {
+                console.log(responseString); 
+                // print to console when response ends
+            });
+        });
      }
 }
 
 function addNews() {
     
-    news1 = new News();
+    var news1 = new News();
     console.log(news1.toString());
 
     if (isOnline()){
@@ -308,8 +349,8 @@ function addNews() {
 }
 function readNews(id) {
     
-    var transaction = db.transaction(["news"]);
-    var objectStore = transaction.objectStore("news");
+    var tranaction = db.tranaction(["news"]);
+    var objectStore = tranaction.objectStore("news");
     var request = objectStore.get(id);
     var result;
     request.onerror = function(event) {
@@ -335,8 +376,9 @@ function readNews(id) {
 function displayNewsOnline(){
     var count = parseInt(localStorage.getItem('count-news'));
     var message;
-    console.log(count);
+    if(isNaN(count)) count =0;
     var news1 = new News();
+    var i;
     for (i = 0; i < count; i++ ) {  
         
         
@@ -366,7 +408,7 @@ function deletenews() {
     }
     localStorage.removeItem('count-news');
 }
-
+if (typeof(window) !== 'undefined') {
 window.addEventListener('load', function () {
 
     function updateOnlineStatus(event) {
@@ -374,11 +416,12 @@ window.addEventListener('load', function () {
 
     if(isOnline()){
     window.addEventListener('online',  displayNewsOnline() );
-    window.addEventListener('online',  displayFansOnline() );
+    window.addEventListener('online',  displayFanOnline() );
     } else {
     window.addEventListener('offline',displayNewsOffline() );
-    window.addEventListener('offline',  displayFansOffline());
+    window.addEventListener('offline',  displayFanOffline());
     }
 }); 
+}
 
 
