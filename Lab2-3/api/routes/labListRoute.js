@@ -2,7 +2,11 @@
 module.exports = function(app) {
   
   var labList = require('../controllers/labListController');
-
+  
+  const cors = require('cors');
+  const express = require('express');
+  app.use(cors());
+  app.options('*', cors());
   // labList Routes
   app.route('/feedbacks')
     .get(labList.list_all_feedbacks)
@@ -19,9 +23,7 @@ module.exports = function(app) {
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       next();
     });
-    var cors = require('cors');
-    app.use(cors());
-    app.options('*', cors());
+    
     
 };
 
